@@ -47,22 +47,7 @@ offset = 100
 # the number of points needed on the buffer to compute the differece between frames
 bufferPoints = 2
 # we need a mask for the area of the court, the points are based on the ROI
-court = np.zeros((1080, 1920, 3))
 courtMaskPoints = np.array([(267, 141), (25, 681), (1422, 686), (1161, 144)])
-
-# Blue color in BGR
-color = (255, 255, 255)
-
-# Line thickness of 2 px
-thickness = 2
-
-# Using cv2.polylines() method
-# Draw a Blue polygon with
-# thickness of 1 px
-imagep = cv2.fillPoly(court[200:900,
-                            250:1700], pts=[courtMaskPoints], color=(255, 255, 255))
-
-cv2.imshow("im", imagep)
 
 # substracts the background from the frame
 backgroundSubstractor = cv2.createBackgroundSubtractorMOG2(
