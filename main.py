@@ -47,7 +47,22 @@ offset = 100
 # the number of points needed on the buffer to compute the differece between frames
 bufferPoints = 2
 # we need a mask for the area of the court, the points are based on the ROI
+court = np.zeros((1080, 1920, 3))
 courtMaskPoints = np.array([(267, 141), (25, 681), (1422, 686), (1161, 144)])
+
+# Blue color in BGR
+color = (255, 255, 255)
+
+# Line thickness of 2 px
+thickness = 2
+
+# Using cv2.polylines() method
+# Draw a Blue polygon with
+# thickness of 1 px
+imagep = cv2.fillPoly(court[200:900,
+                            250:1700], pts=[courtMaskPoints], color=(255, 255, 255))
+
+cv2.imshow("im", imagep)
 
 # substracts the background from the frame
 backgroundSubstractor = cv2.createBackgroundSubtractorMOG2(
@@ -109,13 +124,13 @@ while True:
 
     # since we just want the region with white pixels (no gray) we set our threshold to 254, 255
     _, thresholdMask = cv2.threshold(bkgnMask, 254, 255, cv2.THRESH_BINARY)
-    #cv2.imshow("threshold", thresh)
+    #cv2.imshow("threshold", thresholdMask)
 
     thresholdMask = cv2.erode(thresholdMask, None, iterations=1)
-    #cv2.imshow("threshold eroded", thresh)
+    #cv2.imshow("threshold eroded", thresholdMask)
 
     thresholdMask = cv2.dilate(thresholdMask, None, iterations=3)
-    #cv2.imshow("threshold dilated", thresh)
+    #cv2.imshow("threshold dilated", thresholdMask)
 
     # we find out countours from our threshold mask
     countours_thresh, _ = cv2.findContours(
@@ -124,6 +139,8 @@ while True:
     # we apply a 'and' operator to our mask (which filters the playesr) and our thresholdMask which deleted the background and keeps the moving objects
     result = mask[200:900,
                   250:1700] & thresholdMask
+
+    #cv2.imshow("Result mask", result)
 
     # from our result we look up for the countours
     countours, _ = cv2.findContours(
